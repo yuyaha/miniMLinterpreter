@@ -1,0 +1,4 @@
+# dune exec miniml
+# OCAMLPARAM: unset
+$ /usr/bin/getconf _NPROCESSORS_ONLN > /var/folders/pg/k2n_w5f1149cxmrhm_jm2t2r0000gn/T/dunec0bce3.output 2> /dev/null
+$ /Users/hattoriyuuya/.opam/default/bin/ocamlc.opt -config > /var/folders/pg/k2n_w5f1149cxmrhm_jm2t2r0000gn/T/dune04d0f0.output
