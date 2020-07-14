@@ -2,9 +2,9 @@
 open Syntax
 %}
 
-%token LPAREN RPAREN SEMISEMI
-%token PLUS MULT LT
-%token IF THEN ELSE TRUE FALSE
+%token EQUAL LPAREN RPAREN SEMISEMI
+%token PLUS MULT LT AND OR
+%token IF THEN ELSE TRUE FALSE LET IN
 
 %token <int> INTV
 %token <Syntax.id> ID
@@ -15,9 +15,19 @@ open Syntax
 
 toplevel :
     e=Expr SEMISEMI { Exp e }
+  | e=LetExpr SEMISEMI { LetExp e }
 
 Expr :
-    e=IfExpr { e }
+    e=LetInExpr { e }
+  | e=IfExpr { e }
+  | e=ORExpr { e }
+
+ORExpr :
+    l=ORExpr OR r=ANDExpr { BinOp (Or, l, r) }
+  | e=ANDExpr { e }
+
+ANDExpr :
+    l=ANDExpr AND r=LTExpr { BinOp (And, l, r) }
   | e=LTExpr { e }
 
 LTExpr :
@@ -41,3 +51,10 @@ AExpr :
 
 IfExpr :
     IF c=Expr THEN t=Expr ELSE e=Expr { IfExp (c, t, e) }
+
+LetInExpr :
+    LET i=ID EQUAL s=Expr IN e=Expr { LetInExp (i, s, e) }
+
+LetExpr :
+    LET i=ID EQUAL s=Expr { UniLetExp (i, s) }
+  | LET i=ID EQUAL s=Expr e=LetExpr { MulLetExp (i, s, e) }

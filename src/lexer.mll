@@ -6,6 +6,8 @@ let reservedWords = [
   ("if", Parser.IF);
   ("then", Parser.THEN);
   ("true", Parser.TRUE);
+  ("let", Parser.LET);
+  ("in", Parser.IN);
 ]
 }
 
@@ -13,15 +15,20 @@ rule main = parse
   (* ignore spacing and newline characters *)
   [' ' '\009' '\012' '\n']+     { main lexbuf }
 
+| "(*" { comment lexbuf; main lexbuf }
+
 | "-"? ['0'-'9']+
     { Parser.INTV (int_of_string (Lexing.lexeme lexbuf)) }
 
+| "=" { Parser.EQUAL }
 | "(" { Parser.LPAREN }
 | ")" { Parser.RPAREN }
 | ";;" { Parser.SEMISEMI }
 | "+" { Parser.PLUS }
 | "*" { Parser.MULT }
 | "<" { Parser.LT }
+| "&&" { Parser.AND }
+| "||" { Parser.OR }
 
 | ['a'-'z'] ['a'-'z' '0'-'9' '_' '\'']*
     { let id = Lexing.lexeme lexbuf in
@@ -32,5 +39,12 @@ rule main = parse
     }
 
 | eof { exit 0 }
+
+
+and comment = parse
+  "*)" {}
+| "(*" { comment lexbuf; comment lexbuf }
+| _ { comment lexbuf }
+
 
 

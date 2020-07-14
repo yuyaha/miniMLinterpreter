@@ -1,7 +1,7 @@
 (* ML interpreter / type reconstruction *)
 type id = string
 
-type binOp = Plus | Mult | Lt
+type binOp = Plus | Mult | Lt | And | Or
 
 type exp =
     Var of id
@@ -9,9 +9,15 @@ type exp =
   | BLit of bool
   | BinOp of binOp * exp * exp
   | IfExp of exp * exp * exp
+  | LetInExp of id * exp * exp
+
+type letexp = 
+    UniLetExp of id * exp
+  | MulLetExp of id * exp * letexp
 
 type program =
     Exp of exp
+  | LetExp of letexp
 
 type tyvar = int
 type ty =
