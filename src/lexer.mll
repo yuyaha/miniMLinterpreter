@@ -30,6 +30,7 @@ rule main = parse
       with
       _ -> Parser.ID id
     }
+
 | eof { exit 0 }
 
 
