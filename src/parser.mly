@@ -21,10 +21,10 @@ toplevel :
   | e=LetRecExpr SEMISEMI { RecDecl e }
 
 Expr :
-    e=FunExpr { e }
-  | e=LetInExpr { e }
+    e=ORExpr { e }
   | e=IfExpr { e }
-  | e=ORExpr { e }
+  | e=FunExpr { e }
+  | e=LetInExpr { e }
 
 ORExpr :
     l=ORExpr ROR r=ANDExpr { BinOp (Ror, l, r) }

@@ -50,6 +50,3 @@ and comment = parse
   "*)" {}
 | "(*" { comment lexbuf; comment lexbuf }
 | _ { comment lexbuf }
-
-
-

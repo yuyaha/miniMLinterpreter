@@ -49,18 +49,45 @@ type program =
   | RecDecl of letrecexp
 
 type tyvar = int
+
 type ty =
     TyInt
   | TyBool
   | TyVar of tyvar
   | TyFun of ty * ty
-  | TyList of ty
 
-let freevar_ty _ =
-  assert false (* Exercise 4.3.1 *)
+let rec freevar_ty = function
+    TyInt -> MySet.empty
+  | TyBool -> MySet.empty
+  | TyVar tv -> MySet.singleton tv
+  | TyFun (t1, t2) -> MySet.union (freevar_ty t1) (freevar_ty t2)
 
-let string_of_ty _ =
-  assert false (* Exercise 4.3.1 *)
+let fresh_tyvar = 
+  let counter = ref 0 in
+  let body () =
+    let v = !counter in
+      counter := v + 1; v
+  in body
 
-let pp_ty ty =
-  print_string (string_of_ty ty)
+let rec string_of_ty = function
+    TyInt -> "int"
+  | TyBool -> "bool"
+  | TyVar tv -> 
+    if (0 <= tv && tv <= 25) then ("'" ^ Char.escaped (Char.chr (tv + 97))) 
+    else let tv' = tv mod 26 and idx = tv / 26 in ("'" ^ Char.escaped (Char.chr (tv' + 97)) ^ string_of_int idx)
+  | TyFun (t1, t2) -> string_of_ty t1 ^ " -> " ^ string_of_ty t2
+
+let pp_ty v = print_string (string_of_ty v)
+
+type tysc = TyScheme of tyvar list * ty
+
+let tysc_of_ty ty = TyScheme ([], ty)
+
+let freevar_tysc tysc = 
+  let TyScheme (tylist, ty) = tysc in
+  let tvset = freevar_ty ty in
+  let rec rmv alpha set = 
+    match alpha with
+        [] -> tvset
+      | x :: rest -> rmv rest (MySet.remove x set) in
+  rmv tylist tvset

@@ -60,7 +60,7 @@ let rec eval_exp env = function
   | IfExp (exp1, exp2, exp3) ->
     let test = eval_exp env exp1 in
     (match test with
-      BoolV true -> eval_exp env exp2
+        BoolV true -> eval_exp env exp2
       | BoolV false -> eval_exp env exp3
       | _ -> err ("Test expression must be boolean: if"))
   | LetInExp (id, exp1, exp2) ->
