@@ -1,11 +1,7 @@
 # MiniML Interpreter
 
-「プログラミング言語処理系」と「計算機科学実験及演習３」の履修者へ：この README は課題を行うにあたって重要な情報を含んでいるので，ちゃんと全部読むこと．
-
-This directory contains the source files for MiniML interpreter, an
-interpreter of a subset of OCaml used in the class "Implementation of
-Programming Languages" provided by the Department of Engineering,
-Kyoto University.
+This ML interpreter is an improved version of the one created in a university experiment.
+The homepage of the experiment is at the following URL:https://kuis-isle3sw.github.io/kuis-isle3sw-portal/
 
 ## Required software/library
 
